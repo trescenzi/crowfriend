@@ -1,0 +1,16 @@
+{
+  "name": "crowfriend",
+  "version": "0.0.1",
+  "description": "A simple discord bot implemented using discordjs",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "audio"
+  ],
+  "author": "trescenzi",
+  "license": "MIT"
+}
