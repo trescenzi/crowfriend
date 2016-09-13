@@ -12,5 +12,9 @@
     "audio"
   ],
   "author": "trescenzi",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^9.0.0",
+    "node-schedule": "^1.1.1"
+  }
 }
