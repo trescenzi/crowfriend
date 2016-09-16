@@ -1,6 +1,6 @@
 const discord = require('discord.js');
-const schedule = require('node-schedule');
 const process = require('process');
+const scheduleGame = require('./src/scheduleGame');
 const bot = new discord.Client();
 
 bot.match = function(regex, cb) {
@@ -22,17 +22,6 @@ bot.match(/fl[oi]p\w*\s*fl[io]p\w*/, (msg) => {
   }
 });
 
-function scheduleGame(msg, match) {
-  const timeToPlay = {
-    hour: parseInt(match[1]),
-    minute: parseInt(match[2]),
-  };
-  console.log(timeToPlay);
-  const j = schedule.scheduleJob(timeToPlay, function() {
-    msg.channel.sendMessage('@Tombo time to play');
-    j.cancel();
-  });
-}
 bot.match(/@\s*(\d+):0?(\d+)/, scheduleGame);
 
 bot.on('message', msg => {
