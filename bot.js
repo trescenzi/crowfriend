@@ -3,28 +3,40 @@ const schedule = require('node-schedule');
 const process = require('process');
 const bot = new discord.Client();
 
+bot.match = function(regex, cb) {
+  this.on('message', (msg) => {
+    let match;
+    if (msg.channel.id !== '225034037180235777') return;
+    if (match = msg.content.match(regex)) cb(msg, match);
+  });
+};
+
+bot.match(/[pP]ing/, (msg) => msg.channel.sendMessage('Cawww!\n *flaps wings*'));
+bot.match(/[fF]osh/, (msg) => msg.channel.sendMessage('Cosh!'));
+bot.match(/fucking hell/, (msg) => msg.channel.sendMessage('(╯°□°）╯︵ ┻━┻'));
+bot.match(/fl[oi]p\w*\s*fl[io]p\w*/, (msg) => {
+  if (Math.floor(Math.random() * 2)) {
+    msg.channel.sendMessage('flop');
+  } else {
+    msg.channel.sendMessage('flip');
+  }
+});
+
+function scheduleGame(msg, match) {
+  const timeToPlay = {
+    hour: parseInt(match[1]),
+    minute: parseInt(match[2]),
+  };
+  console.log(timeToPlay);
+  const j = schedule.scheduleJob(timeToPlay, function() {
+    msg.channel.sendMessage('@Tombo time to play');
+    j.cancel();
+  });
+}
+bot.match(/@\s*(\d+):0?(\d+)/, scheduleGame);
+
 bot.on('message', msg => {
   console.log(msg.timestamp + ':\t' + msg.author.username + ':' + msg.content);
-  const content = msg.content;
-  let match;
-
-  if (msg.channel.id !== '225034037180235777') return;
-
-  if (content.match(/[pP]ing/)) {
-    msg.channel.sendMessage('Cawww!');
-  }
-  if (content.match(/[fF]osh/)) {
-    msg.channel.sendMessage('Cosh!');
-  }
-
-  if (match = content.match(/@\s*(\d+):(\d+)/)) {
-    console.log(match[0], match[1], match[2]);
-    const j = schedule.scheduleJob({hour: match[1], minute: match[2]}, function() {
-      console.log('hey');
-      msg.channel.sendMessage('@Tombo time to play');
-      j.cancel();
-    });
-  }
 });
 
 bot.on('error', (e) => {
