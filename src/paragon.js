@@ -25,11 +25,12 @@ class Card {
   }
 
   _parseCardStat(statName, damageType) {
-    switch (statName) {
+    if (!statName) return;
+
+    switch (statName.replace(/[\.$|,$]/, '')) {
       case 'MaxEnergy':
         return 'Max Mana';
       case 'AttackRating':
-        console.log(damageType);
         return damageType === 'Energy' ? 'Energy Damage' : 'Physical Damage';
       case 'CriticalDamageChance':
         return 'Crit Chance';
@@ -38,13 +39,9 @@ class Card {
       case 'MaxHealth':
         return 'Max Health';
       case '{attr:enar}':
-      case '{attr:enar}.':
-      case '{attr:enar},':
       case 'EnergyResistanceRating':
         return 'Energy Armor';
       case '{attr:physar}':
-      case '{attr:physar}.':
-      case '{attr:physar},':
       case 'PhysicalResistanceRating':
         return 'Physical Armor';
       case 'EnergyPenetrationRating':
@@ -58,20 +55,12 @@ class Card {
       case 'WellRigPlacementTimer':
         return 'Harvester Placement Time';
       case '{attr:mp}':
-      case '{attr:mp}.':
-      case '{attr:mp},':
         return 'Mana';
       case '{attr:hp}':
-      case '{attr:hp},':
-      case '{attr:hp}.':
         return 'Health';
       case '{attr:shld}':
-      case '{attr:shld},':
-      case '{attr:shld}.':
         return 'Shield';
       case '{attr:cdr}':
-      case '{attr:cdr}.':
-      case '{attr:cdr},':
         return 'Cooldown';
       default:
         return statName;
@@ -113,7 +102,7 @@ class Card {
         return `*${name}* ${cost}-${type}\n${effects}\nFully Upgraded: ${maxedEffects}`;
       }
       return `*${name}* ${cost}-${type}\n${effects}`;
-    });
+    }).catch((e) => console.log(e));
   }
 
   get imageUrl() {
@@ -172,7 +161,9 @@ function getCardImage(msg, match) {
 function getCardText(msg, match) {
   const card = getClosestCardToMatch(match);
   if (card) {
-    card.getText().then((text) => msg.channel.sendMessage(text));
+    card.getText()
+      .then((text) => msg.channel.sendMessage(text))
+      .catch((e) => console.log(e));
   }
 }
 
